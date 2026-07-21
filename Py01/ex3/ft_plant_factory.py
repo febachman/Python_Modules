@@ -6,7 +6,7 @@ class Plant:
         self.growth = growth
 
     def show(self):
-        print(f"Created: {self.name}: {self.height:.1f}cm, {self.time} days old")
+        print(f"{self.name}: {self.height:.1f}cm, {self.time} days old")
 
 
 if __name__ == "__main__":
@@ -18,5 +18,5 @@ if __name__ == "__main__":
     fern = Plant("Fern", 15, 120)
     garden = [rose, oak, cactus, sunflower, fern]
     for plant in garden:
+        print("Created: ", end="")
         plant.show()
-
