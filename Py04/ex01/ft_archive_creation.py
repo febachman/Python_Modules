@@ -36,11 +36,9 @@ def transform_and_save(content: str) -> None:
         else:
             transformed_lines.append(line + "#")
     transformed_content = "".join(transformed_lines)
-    print("---")
-    print()
+    print("---\n")
     print(transformed_content)
-    print()
-    print("---")
+    print("\n---")
     new_filename = input("Enter new file name (or empty): ")
     if new_filename == "":
         print("Not saving data.")

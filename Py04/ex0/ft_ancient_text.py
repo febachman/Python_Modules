@@ -10,11 +10,9 @@ def display_archive_content(filename: str) -> None:
         file: typing.IO[str] = open(filename, "r")
         try:
             content = file.read()
-            print("---")
-            print()
+            print("---\n")
             print(content)
-            print()
-            print("---")
+            print("\n---")
             print(f"File '{filename}' closed.")
         finally:
             file.close()
