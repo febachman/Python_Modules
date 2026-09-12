@@ -13,7 +13,7 @@ class Creature(ABC):
     def describe(self) -> str:
         """Concrete method that returns creature description"""
         return f"{self.name} is a {self.type} type Creature"
-    
+
     @abstractmethod
     def attack(self) -> str:
         """Abstract method that returns creature attack"""
@@ -27,6 +27,7 @@ class Flameling(Creature):
     def attack(self) -> str:
         return f"{self.name} uses Ember!"
 
+
 class Pyrodon(Creature):
     def __init__(self) -> None:
         super().__init__("Pyrodon", "Fire/Flying")
@@ -34,12 +35,14 @@ class Pyrodon(Creature):
     def attack(self) -> str:
         return f"{self.name} uses Flamethrower!"
 
+
 class Aquabub(Creature):
     def __init__(self) -> None:
         super().__init__("Aquabub", "Water")
 
     def attack(self) -> str:
         return f"{self.name} uses Water Gun!"
+
 
 class Torragon(Creature):
     def __init__(self) -> None:

@@ -4,6 +4,7 @@ from abc import ABC, abstractmethod
 from ex0.creatures import Creature
 from ex0 import CreatureFactory
 
+
 class TransformCapability(ABC):
     """Abstract class for transforming capability with persistent state"""
 

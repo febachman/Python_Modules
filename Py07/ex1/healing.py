@@ -4,12 +4,14 @@ from abc import ABC, abstractmethod
 from ex0.creatures import Creature
 from ex0 import CreatureFactory
 
+
 class HealCapability(ABC):
     """Abstract class for healing capability"""
 
     @abstractmethod
     def heal(self) -> str:
         pass
+
 
 class Sproutling(Creature, HealCapability):
     def __init__(self) -> None:
