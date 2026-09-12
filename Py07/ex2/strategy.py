@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from abc import ABC, abstractmethod
+from typing import cast
 from ex0.creatures import Creature
 from ex1.healing import HealCapability
 from ex1.transforming import TransformCapability
@@ -37,10 +38,11 @@ class AggressiveStrategy(BattleStrategy):
                 f"Invalid Creature '{creature.name}' "
                 "for this aggressive strategy"
             )
+        transform_creature = cast(TransformCapability, creature)
         return (
-            f"{creature.transform()}\n{creature.attack()}\n{creature.revert()}"
+            f"{transform_creature.transform()}\n{creature.attack()}"
+            f"\n{transform_creature.revert()}"
         )
-
 
 class DefensiveStrategy(BattleStrategy):
     def is_valid(self, creature: Creature) -> bool:
@@ -54,4 +56,5 @@ class DefensiveStrategy(BattleStrategy):
                 f"Invalid Creature '{creature.name}' "
                 "for this defensive strategy"
             )
-        return f"{creature.attack()}\n{creature.heal()}"
+        heal_creature = cast(HealCapability, creature)
+        return f"{creature.attack()}\n{heal_creature.heal()}"
