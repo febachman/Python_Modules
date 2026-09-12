@@ -1,26 +1,49 @@
 #!/usr/bin/env python3
 
-#  ex0/creatures.py: Houses the abstract Creature base class (defining name, type, abstract attack, and concrete describe methods) along with the concrete creature implementations (Flameling, Pyrodon, Aquabub, and Torragon).
-
 from abc import ABC, abstractmethod
-from typing import Optional
 
-class Creatures(ABC):
-    """Abstract class hat holds attributes for name and type of the Creature"""
 
-    def __init__(self) -> None:
-        self._storage: List[Tuple[int, str]] = []
-        self._rank: int = 0
+class Creature(ABC):
+    """Abstract base class for all Creatures."""
 
+    def __init__(self, name: str, creature_type: str) -> None:
+        self.name = name
+        self.type = creature_type
+
+    def describe(self) -> str:
+        """Concrete method that returns creature description"""
+        return f"{self.name} is a {self.type} type Creature"
+    
     @abstractmethod
-    def attack():
+    def attack(self) -> str:
+        """Abstract method that returns creature attack"""
+        pass
 
-	def describe():
 
-class Flameling(Creatures):
+class Flameling(Creature):
+    def __init__(self) -> None:
+        super().__init__("Flameling", "Fire")
 
-class Pyrodon(Creatures):
+    def attack(self) -> str:
+        return f"{self.name} uses Ember!"
 
-class Aquabub(Creatures):
+class Pyrodon(Creature):
+    def __init__(self) -> None:
+        super().__init__("Pyrodon", "Fire/Flying")
 
-class Torragon(Creatures):
+    def attack(self) -> str:
+        return f"{self.name} uses Flamethrower!"
+
+class Aquabub(Creature):
+    def __init__(self) -> None:
+        super().__init__("Aquabub", "Water")
+
+    def attack(self) -> str:
+        return f"{self.name} uses Water Gun!"
+
+class Torragon(Creature):
+    def __init__(self) -> None:
+        super().__init__("Torragon", "Water")
+
+    def attack(self) -> str:
+        return f"{self.name} uses Hydro Pump!"
