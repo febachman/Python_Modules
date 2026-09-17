@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "loading"
+version = "0.1.0"
+description = "Matrix data analysis tool for 42 module 08"
+authors = ["Resistance Fighter <neo@matrix.org>"]
+readme = "README.md"
+packages = [{include = "loading.py"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pandas = "^2.0.0"
+numpy = "^1.20.0"
+requests = "^2.31.0"
+matplotlib = "^3.7.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
