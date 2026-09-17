@@ -1,0 +1,6 @@
+.env
+__pycache__/
+*.py[cod]
+matrix_analysis.png
+matrix_env/
+test_env/
