@@ -44,6 +44,7 @@ class AggressiveStrategy(BattleStrategy):
             f"\n{transform_creature.revert()}"
         )
 
+
 class DefensiveStrategy(BattleStrategy):
     def is_valid(self, creature: Creature) -> bool:
         if isinstance(creature, HealCapability):
