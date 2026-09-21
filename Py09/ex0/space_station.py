@@ -16,7 +16,7 @@ class SpaceStation(BaseModel):
     notes: Optional[str] = Field(None, max_length=200)
 
 
-def main():
+def main() -> None:
     print("Space Station Data Validation")
     print("=" * 40)
 
@@ -28,7 +28,8 @@ def main():
             crew_size=6,
             power_level=85.5,
             oxygen_level=92.3,
-            last_maintenance="2026-06-01T08:30:00",  # String auto-coerced to datetime!
+            last_maintenance=datetime(2026, 6, 1, 8, 30, 0),
+            # String auto-coerced to datetime!
             notes="Routine maintenance completed successfully.",
         )
 
@@ -39,7 +40,8 @@ def main():
         print(f"Power: {valid_station.power_level}%")
         print(f"Oxygen: {valid_station.oxygen_level}%")
         status_text = (
-            "Operational" if valid_station.is_operational else "Non-Operational"
+            "Operational" if valid_station.is_operational
+            else "Non-Operational"
         )
         print(f"Status: {status_text}")
 
@@ -58,9 +60,11 @@ def main():
             power_level=50.0,
             oxygen_level=50.0,
             last_maintenance=datetime.now(),
+            notes=None,
         )
     except ValidationError as e:
-        # Pydantic's error messages are detailed; we pull out the specific error message text
+        # Pydantic's error messages are detailed;
+        # we pull out the specific error message text
         for error in e.errors():
             print(error["msg"])
 
