@@ -8,7 +8,7 @@ from data_generator import FuncMageDataGenerator
 
 
 def spell_reducer(spells: list[int], operation: str) -> int:
-    """Reduce spell powers using functools.reduce and operator module."""
+    """Reduce spell powers using functools.reduce and operator module"""
     if not spells:
         return 0
 
@@ -28,14 +28,14 @@ def spell_reducer(spells: list[int], operation: str) -> int:
 
 
 def base_enchantment(power: int, element: str, target: str) -> str:
-    """Base enchantment function to be partially applied."""
+    """Base enchantment function to be partially applied"""
     return f"{element.capitalize()} enchantment of power {power} on {target}"
 
 
 def partial_enchanter(
     base_func: Callable[..., str]
 ) -> dict[str, Callable[..., Any]]:
-    """Create partial applications pre-filling power=50 and elements."""
+    """Create partial applications pre-filling power=50 and elements"""
     elements = ["fire", "ice", "lightning"]
     enchanters: dict[str, Callable[..., Any]] = {}
 
@@ -48,7 +48,7 @@ def partial_enchanter(
 
 @functools.lru_cache(maxsize=None)
 def memoized_fibonacci(n: int) -> int:
-    """Calculate the nth Fibonacci number with lru_cache memoization."""
+    """Calculate the nth Fibonacci number with lru_cache memoization"""
     if n < 0:
         raise ValueError("n must be non-negative")
     if n <= 1:
@@ -57,7 +57,7 @@ def memoized_fibonacci(n: int) -> int:
 
 
 def spell_dispatcher() -> Callable[[Any], str]:
-    """Create a single dispatch system handling different types."""
+    """Create a single dispatch system handling different types"""
     @functools.singledispatch
     def dispatch(spell: Any) -> str:
         return "Unknown spell type"
@@ -86,6 +86,16 @@ if __name__ == "__main__":
     print(f"Max: {spell_reducer(spell_powers, 'max')}")
     print(f"Min: {spell_reducer(spell_powers, 'min')}")
 
+    print("\nTesting spell reducer edge cases...")
+    # 1. Test empty list (should return 0)
+    empty_result = spell_reducer([], "add")
+    print(f"Empty spells list result: {empty_result}")
+    # 2. Test unknown operation (should raise ValueError)
+    try:
+        spell_reducer([10, 20, 30], 'percentage')
+    except ValueError as e:
+        print(f"Error successfully caught: {e}")
+
     print("\nTesting memoized fibonacci...")
     fib_tests = [0, 1, random.randint(8, 12), random.randint(13, 18)]
     for n in fib_tests:
@@ -101,15 +111,15 @@ if __name__ == "__main__":
     print("\nTesting spell dispatcher...")
     dispatcher = spell_dispatcher()
 
-    # 1. Test: int type (magical power)
+    # 1. Test: int type (damage spell)
     dynamic_power = FuncMageDataGenerator.generate_spell_powers(1)[0]
     print(dispatcher(dynamic_power))
 
-    # 2. Test: str type (magical name)
+    # 2. Test: str type (enchantment)
     dynamic_spell = FuncMageDataGenerator.generate_spells(1)[0]
     print(dispatcher(dynamic_spell))
 
-    # 3. Test: list type (multiple spells)
+    # 3. Test: list type (multi-cast)
     dynamic_multicast = FuncMageDataGenerator.generate_spells(3)
     print(dispatcher(dynamic_multicast))
 
