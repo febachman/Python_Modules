@@ -4,6 +4,7 @@ from datetime import datetime
 from enum import Enum
 from typing import List
 from pydantic import BaseModel, Field, ValidationError, model_validator
+from data_generator import DataConfig, CrewMissionGenerator
 
 
 class Rank(str, Enum):
@@ -73,63 +74,32 @@ def main() -> None:
     print("Space Mission Crew Validation")
     print("=" * 41)
 
-    # 1. Creating a valid mission instance
-    try:
-        valid_mission = SpaceMission(
-            mission_id="M2024_MARS",
-            mission_name="Mars Colony Establishment",
-            destination="Mars",
-            launch_date=datetime(2024, 9, 1, 0, 0, 0),
-            duration_days=900,  # Long mission, requires experienced crew
-            budget_millions=2500.0,
-            crew=[
-                CrewMember(
-                    member_id="CRM001",
-                    name="Sarah Connor",
-                    rank=Rank.commander,
-                    age=42,
-                    specialization="Mission Command",
-                    years_experience=15,
-                ),
-                CrewMember(
-                    member_id="CRM002",
-                    name="John Smith",
-                    rank=Rank.lieutenant,
-                    age=34,
-                    specialization="Navigation",
-                    years_experience=8,
-                ),
-                CrewMember(
-                    member_id="CRM003",
-                    name="Alice Johnson",
-                    rank=Rank.officer,
-                    age=28,
-                    specialization="Engineering",
-                    years_experience=3,
-                ),
-            ],
-        )
+    # Valid mission
+    config = DataConfig()
+    mission_gen = CrewMissionGenerator(config)
 
-        print("Valid mission created:")
-        print(f"Mission: {valid_mission.mission_name}")
-        print(f"ID: {valid_mission.mission_id}")
-        print(f"Destination: {valid_mission.destination}")
-        print(f"Duration: {valid_mission.duration_days} days")
-        print(f"Budget: ${valid_mission.budget_millions}M")
-        print(f"Crew size: {len(valid_mission.crew)}")
-        print("Crew members:")
-        for member in valid_mission.crew:
-            print(
-                f"  - {member.name} ({member.rank.value})"
-                f" - {member.specialization}"
+    raw_missions = mission_gen.generate_mission_data(3)
+    print(f"Successfully generated & validated {len(raw_missions)} missions:")
+    for raw in raw_missions:
+        try:
+            mission = SpaceMission(**raw)
+            crew_details = "".join(
+                f"\n      - {m.name} ({m.rank.value}) - {m.specialization}"
+                for m in mission.crew
             )
+            print(
+                f"  - [{mission.mission_id}]\n"
+                f"  - {mission.mission_name}\n"
+                f"  - Destination: {mission.destination}\n"
+                f"  - Crew Size: {len(mission.crew)}\n"
+                f"  - Crew Members:{crew_details}\n"
+                f"  - Budget: ${mission.budget_millions}M"
+            )
+            print("=" * 41)
+        except ValidationError as e:
+            print(f"  - Validation failed for {raw.get('mission_id')}: {e}")
 
-    except ValidationError as e:
-        print(f"Unexpected validation error: {e}")
-
-    # 2. Attempting to create an invalid mission (Missing Commander/Captain)
-    print("=" * 41)
-    print()
+    # Invalid mission (Missing Commander/Captain)
     print("Expected validation error:")
     try:
         SpaceMission(
@@ -148,7 +118,7 @@ def main() -> None:
                     specialization="General",
                     years_experience=0,
                 )
-            ],  # Missing Commander or Captain!
+            ]
         )
     except ValidationError as e:
         for error in e.errors():

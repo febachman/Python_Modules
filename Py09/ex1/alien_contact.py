@@ -4,6 +4,7 @@ from datetime import datetime
 from enum import Enum
 from typing import Optional
 from pydantic import BaseModel, Field, ValidationError, model_validator
+from data_generator import DataConfig, AlienContactGenerator
 
 
 class ContactType(str, Enum):
@@ -56,36 +57,27 @@ def main() -> None:
     print("Alien Contact Log Validation")
     print("=" * 38)
 
-    # 1. Creating a valid contact report
-    try:
-        valid_contact = AlienContact(
-            contact_id="AC_2024_001",
-            timestamp=datetime(2024, 6, 15, 22, 30, 0),
-            location="Area 51, Nevada",
-            contact_type=ContactType.radio,
-            signal_strength=8.5,
-            duration_minutes=45,
-            witness_count=5,
-            message_received="Greetings from Zeta Reticuli",
-            is_verified=True,
-        )
+    config = DataConfig()
+    contact_gen = AlienContactGenerator(config)
 
-        print("Valid contact report:")
-        print(f"ID: {valid_contact.contact_id}")
-        print(f"Type: {valid_contact.contact_type.value}")
-        print(f"Location: {valid_contact.location}")
-        print(f"Signal: {valid_contact.signal_strength}/10")
-        print(f"Duration: {valid_contact.duration_minutes} minutes")
-        print(f"Witnesses: {valid_contact.witness_count}")
-        print(f"Message: '{valid_contact.message_received}'")
+    # Valid contact report
+    raw_contacts = contact_gen.generate_contact_data(3)
+    print(f"Successfully generated and validated {len(raw_contacts)} reports:")
+    for raw in raw_contacts:
+        try:
+            contact = AlienContact(**raw)
+            print(
+                f"  - [{contact.contact_id}] "
+                f"Type: {contact.contact_type.value} "
+                f"| Location: {contact.location} "
+                f"| Signal: {contact.signal_strength}/10"
+            )
+        except ValidationError as e:
+            print(f"  - Validation failed for {raw.get('contact_id')}: {e}")
 
-    except ValidationError as e:
-        print(f"Unexpected validation error: {e}")
+    print("=" * 38)
 
-    # 2. Attempting to create an invalid contact report
-    # (Telepathic with only 1 witness)
-    print("=" * 41)
-    print()
+    # Invalid contact report (Telepathic with 1 witness)
     print("Expected validation error:")
     try:
         AlienContact(
@@ -99,6 +91,7 @@ def main() -> None:
             is_verified=False,
             message_received=None,
         )
+
     except ValidationError as e:
         for error in e.errors():
             print(error["msg"])
